@@ -47,14 +47,26 @@ public class AutoRebookApplication implements CommandLineRunner {
         Itinerary itinerary = new Itinerary();
         itinerary.setPassenger(new Traveler());
         itinerary.setPassengerNameRecord(randomPnr());
-        for (int i = 0; i < randomInt(); i++) {
-            Booking booking = new Booking().setBookedOn(random)
-                    .setPrice(randomPrice())
+        int previousPrice = randomPrice();
+        Booking initialBooking = new Booking().setBookedOn(random)
+                .setPrice(previousPrice)
+                .setDepartingAirport("SEA")
+                .setArrivingAirport("LAX");
+        itinerary.addBooking(initialBooking);
+        int numBookings = 0;
+        int maxBookings = randomInt();
+        int nextPrice = randomPrice();
+        while (nextPrice < previousPrice ) {
+            if (numBookings == maxBookings) break;
+            random = new Date(random.getTime() + 3600 * 1000); // move date forward 1hr
+            Booking nextBooking = new Booking().setBookedOn(random)
+                    .setPrice(nextPrice)
                     .setDepartingAirport("SEA")
                     .setArrivingAirport("LAX");
-            itinerary.addBooking(booking);
-            random = new Date(random.getTime() + 3600 * 1000); // move date forward 1hr
-            TimeUnit.SECONDS.sleep(2);
+            itinerary.addBooking(nextBooking);
+            numBookings++;
+            previousPrice = nextPrice;
+            nextPrice = randomPrice();
         }
 
         Itinerary persistedItinerary = itineraryService.createItinerary(itinerary);
