@@ -1,4 +1,4 @@
-package com.example.propertymanager.config;
+package com.example.autorebook.config;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;

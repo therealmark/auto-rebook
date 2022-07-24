@@ -1,7 +1,6 @@
-package com.example.propertymanager.client;
+package com.example.autorebook.client;
 
-import com.example.propertymanager.model.Listing;
-import com.example.propertymanager.model.User;
+import com.example.autorebook.model.Itinerary;
 import com.mongodb.ConnectionString;
 import com.mongodb.MongoClientSettings;
 import com.mongodb.client.MongoClient;
@@ -47,6 +46,7 @@ public class DBClient {
                 .build();
         mongoClient = MongoClients.create(clientSettings);
         database = mongoClient.getDatabase(databaseName);
+        database.getCollection("itineraries").drop();
     }
 
     @PreDestroy
@@ -54,16 +54,16 @@ public class DBClient {
         mongoClient.close();
     }
 
-    public MongoCollection<User> getUserCollection() {
-        return database.getCollection("users", User.class);
+    public MongoCollection<Itinerary> getItineraryCollection() {
+        return database.getCollection("itineraries", Itinerary.class);
     }
 
-    public User insertUser(User user) {
-        BsonValue insertedId = getUserCollection().insertOne(user).getInsertedId();
-        return getUserCollection().find(eq("_id", insertedId)).first();
+    public Itinerary insertItinerary(Itinerary itinerary) {
+        BsonValue insertedId = getItineraryCollection().insertOne(itinerary).getInsertedId();
+        return getItineraryCollection().find(eq("_id", insertedId)).first();
     }
 
-    public User findUserById(String id) {
-        return getUserCollection().find(eq(new ObjectId(id))).first();
+    public Itinerary findItineraryById(String id) {
+        return getItineraryCollection().find(eq(new ObjectId(id))).first();
     }
 }
