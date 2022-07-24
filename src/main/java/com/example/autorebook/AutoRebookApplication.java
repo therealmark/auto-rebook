@@ -32,20 +32,18 @@ public class AutoRebookApplication implements CommandLineRunner {
     public void run(String... args) throws Exception {
         int count = 0;
         while (count < 1000) {
-            TimeUnit.SECONDS.sleep(2);
             generateItinerary();
             count++;
         }
 
     }
 
-    private void generateItinerary() {
+    private void generateItinerary() throws InterruptedException {
         long aDay = TimeUnit.DAYS.toMillis(1);
         long now = new Date().getTime();
         Date fiveYearsAgo = new Date(now - aDay * 365 * 5);
         Date oneDayAgo = new Date(now - aDay * 1);
         Date random = between(fiveYearsAgo, oneDayAgo);
-
         Itinerary itinerary = new Itinerary();
         itinerary.setPassenger(new Traveler());
         itinerary.setPassengerNameRecord(randomPnr());
@@ -55,6 +53,8 @@ public class AutoRebookApplication implements CommandLineRunner {
                     .setDepartingAirport("SEA")
                     .setArrivingAirport("LAX");
             itinerary.addBooking(booking);
+            random = new Date(random.getTime() + 3600 * 1000); // move date forward 1hr
+            TimeUnit.SECONDS.sleep(2);
         }
 
         Itinerary persistedItinerary = itineraryService.createItinerary(itinerary);
