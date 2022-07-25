@@ -21,7 +21,6 @@ public class Itinerary {
     private ObjectId id;
     private Traveler passenger;
     private String passengerNameRecord;
-
     private List<Booking> bookings = new ArrayList<>();
 
     public Itinerary setPassenger(Traveler passenger) {

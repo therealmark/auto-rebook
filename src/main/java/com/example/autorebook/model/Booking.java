@@ -18,6 +18,8 @@ public class Booking {
     private String arrivingAirport;
     private Integer price;
 
+    private String airline;
+
     public Booking setBookedOn(Date bookedOn) {
         this.bookedOn = bookedOn;
         return this;
@@ -35,6 +37,11 @@ public class Booking {
 
     public Booking setPrice(Integer price) {
         this.price = price;
+        return this;
+    }
+
+    public Booking setAirline(String airline) {
+        this.airline = airline;
         return this;
     }
 }

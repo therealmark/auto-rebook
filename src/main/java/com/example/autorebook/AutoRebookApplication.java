@@ -24,6 +24,8 @@ public class AutoRebookApplication implements CommandLineRunner {
     ItineraryService itineraryService;
     Logger LOG = LoggerFactory.getLogger(this.getClass().getCanonicalName());
 
+    private static final String[] airlines = {"ASA", "AAL", "DAL", "FFT", "JBU", "SWA", "UAL", "SIL", "SKW", "G6", "SK"};
+
     public static void main(String[] args) {
         SpringApplication.run(AutoRebookApplication.class, args);
     }
@@ -38,7 +40,7 @@ public class AutoRebookApplication implements CommandLineRunner {
 
     }
 
-    private void generateItinerary() throws InterruptedException {
+    private void generateItinerary() {
         long aDay = TimeUnit.DAYS.toMillis(1);
         long now = new Date().getTime();
         Date fiveYearsAgo = new Date(now - aDay * 365 * 5);
@@ -51,7 +53,8 @@ public class AutoRebookApplication implements CommandLineRunner {
         Booking initialBooking = new Booking().setBookedOn(random)
                 .setPrice(previousPrice)
                 .setDepartingAirport("SEA")
-                .setArrivingAirport("LAX");
+                .setArrivingAirport("LAX")
+                .setAirline(airlines[randomInt()]);
         itinerary.addBooking(initialBooking);
         int numBookings = 0;
         int maxBookings = randomInt();
@@ -62,13 +65,13 @@ public class AutoRebookApplication implements CommandLineRunner {
             Booking nextBooking = new Booking().setBookedOn(random)
                     .setPrice(nextPrice)
                     .setDepartingAirport("SEA")
-                    .setArrivingAirport("LAX");
+                    .setArrivingAirport("LAX")
+                    .setAirline(initialBooking.getAirline());
             itinerary.addBooking(nextBooking);
             numBookings++;
             previousPrice = nextPrice;
             nextPrice = randomPrice();
         }
-
         Itinerary persistedItinerary = itineraryService.createItinerary(itinerary);
 
         LOG.info(persistedItinerary.toString());
@@ -101,7 +104,7 @@ public class AutoRebookApplication implements CommandLineRunner {
     int randomInt() {
         Random r = new Random();
         int low = 1;
-        int high = 8;
+        int high = 11;
         return r.nextInt(high-low) + low;
     }
 }
