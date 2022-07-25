@@ -46,7 +46,7 @@ public class DBClient {
                 .build();
         mongoClient = MongoClients.create(clientSettings);
         database = mongoClient.getDatabase(databaseName);
-        database.getCollection("itineraries").drop();
+//        database.getCollection("itineraries").drop();
     }
 
     @PreDestroy
