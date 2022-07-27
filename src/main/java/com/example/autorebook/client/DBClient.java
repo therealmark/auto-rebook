@@ -46,7 +46,7 @@ public class DBClient {
                 .build();
         mongoClient = MongoClients.create(clientSettings);
         database = mongoClient.getDatabase(databaseName);
-//        database.getCollection("itineraries").drop();
+        database.getCollection("itineraries-source").drop();
     }
 
     @PreDestroy
@@ -55,7 +55,7 @@ public class DBClient {
     }
 
     public MongoCollection<Itinerary> getItineraryCollection() {
-        return database.getCollection("itineraries", Itinerary.class);
+        return database.getCollection("itineraries-source", Itinerary.class);
     }
 
     public Itinerary insertItinerary(Itinerary itinerary) {
